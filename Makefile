@@ -20,8 +20,17 @@ ifeq ($(GEANY_CFLAGS),)
     endif
 endif
 
-CFLAGS = -Wall -fPIC $(GEANY_CFLAGS)
-LDFLAGS = -shared $(GEANY_LIBS)
+# Try to use pkg-config for libcurl, fall back to defaults
+CURL_CFLAGS := $(shell pkg-config --cflags libcurl 2>/dev/null)
+CURL_LIBS := $(shell pkg-config --libs libcurl 2>/dev/null)
+
+ifeq ($(CURL_CFLAGS),)
+    CURL_CFLAGS = -I/usr/include/curl -I/opt/homebrew/include
+    CURL_LIBS = -lcurl
+endif
+
+CFLAGS = -Wall -fPIC $(GEANY_CFLAGS) $(CURL_CFLAGS)
+LDFLAGS = -shared $(GEANY_LIBS) $(CURL_LIBS)
 
 all: check-deps $(TARGET)
 

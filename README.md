@@ -23,19 +23,19 @@ brew install geany
 
 **Ubuntu/Debian:**
 ```bash
-sudo apt-get install geany geany-dev libgtk-3-dev
+sudo apt-get install geany geany-dev libgtk-3-dev libcurl4-openssl-dev
 ```
 
 **CentOS/RHEL/Fedora:**
 ```bash
-sudo yum install geany geany-devel gtk3-devel
+sudo yum install geany geany-devel gtk3-devel libcurl-devel
 # or on newer versions:
-sudo dnf install geany geany-devel gtk3-devel
+sudo dnf install geany geany-devel gtk3-devel libcurl-devel
 ```
 
-### Install WakaTime CLI
+### Install WakaTime CLI (Optional)
 
-The plugin requires wakatime-cli to be installed. Install it with:
+The plugin will automatically download wakatime-cli to `~/.wakatime/` if it's not found. However, you can also install it manually:
 
 ```bash
 pip install wakatime
@@ -83,8 +83,11 @@ That's it! The plugin will now automatically track your coding time.
 ## Features
 
 - **Automatic tracking**: Sends heartbeats when you open, save, or switch between files
+- **Auto-download CLI**: Automatically downloads wakatime-cli if not found
+- **Project detection**: Automatically detects Git projects
 - **Rate limiting**: Only sends one heartbeat per 2 minutes per file (except saves)
 - **Cross-platform**: Works on macOS, Linux, and other Unix-like systems
+- **Plugin identification**: Reports as "geany-wakatime" to WakaTime dashboard
 - **No configuration needed**: Works out of the box once API key is set
 
 ## Troubleshooting
