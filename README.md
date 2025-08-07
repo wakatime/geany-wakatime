@@ -35,13 +35,7 @@ sudo dnf install geany geany-devel gtk3-devel libcurl-devel
 
 ### Install WakaTime CLI (Optional)
 
-The plugin will automatically download wakatime-cli to `~/.wakatime/` if it's not found. However, you can also install it manually:
-
-```bash
-pip install wakatime
-```
-
-Or download from: https://github.com/wakatime/wakatime-cli/releases
+The plugin will automatically download wakatime-cli to `~/.wakatime/`.
 
 ## Installation
 
