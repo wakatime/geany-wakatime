@@ -47,13 +47,7 @@ static gboolean download_wakatime_cli(void)
 
     g_mkdir_with_parents(wakatime_dir, 0755);
 
-    CURL *curl = curl_easy_init();
-    if (!curl) {
-        g_warning("WakaTime: Failed to initialize curl");
-        goto cleanup;
-    }
-
-    gchar *url;
+    gchar *url = NULL;
 #ifdef __APPLE__
     url = g_strdup_printf("https://github.com/wakatime/wakatime-cli/releases/download/%s/wakatime-cli-darwin-amd64", WAKATIME_CLI_VERSION);
 #elif defined(__linux__)
@@ -61,6 +55,12 @@ static gboolean download_wakatime_cli(void)
 #else
     url = g_strdup_printf("https://github.com/wakatime/wakatime-cli/releases/download/%s/wakatime-cli-linux-amd64", WAKATIME_CLI_VERSION);
 #endif
+
+    CURL *curl = curl_easy_init();
+    if (!curl) {
+        g_warning("WakaTime: Failed to initialize curl");
+        goto cleanup;
+    }
 
     DownloadData data;
     data.fp = fopen(temp_path, "wb");
