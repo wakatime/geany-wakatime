@@ -2,7 +2,7 @@ CC = gcc
 SRCDIR = src
 SOURCES = $(SRCDIR)/main.c
 OBJECTS = $(SOURCES:.c=.o)
-TARGET = wakatime.so
+TARGET = geany-wakatime.so
 
 # Try to use pkg-config first, fall back to manual paths
 GEANY_CFLAGS := $(shell pkg-config --cflags geany 2>/dev/null)
@@ -27,21 +27,38 @@ all: check-deps $(TARGET)
 
 check-deps:
 	@echo "Checking dependencies..."
-	@if ! command -v geany >/dev/null 2>&1; then \
-		echo "ERROR: Geany is not installed."; \
-		echo ""; \
-		echo "On macOS, install with:"; \
-		echo "  brew install geany"; \
-		echo ""; \
-		echo "On Ubuntu/Debian, install with:"; \
-		echo "  sudo apt-get install geany geany-dev libgtk-3-dev"; \
-		echo ""; \
-		echo "On CentOS/RHEL, install with:"; \
-		echo "  sudo yum install geany geany-devel gtk3-devel"; \
-		echo ""; \
-		exit 1; \
+	@if [ "$(shell uname -s)" = "Darwin" ]; then \
+		if ! command -v geany >/dev/null 2>&1 && ! test -d /usr/local/Caskroom/geany; then \
+			echo "ERROR: Geany is not installed."; \
+			echo ""; \
+			echo "On macOS, you need the formula version (not cask) for plugin development:"; \
+			echo "  brew uninstall --cask geany  # if you have the cask version"; \
+			echo "  brew install geany"; \
+			echo ""; \
+			exit 1; \
+		elif test -d /usr/local/Caskroom/geany && ! command -v geany >/dev/null 2>&1; then \
+			echo "ERROR: You have Geany cask installed, but need the formula version for plugin development."; \
+			echo ""; \
+			echo "Please run:"; \
+			echo "  brew uninstall --cask geany"; \
+			echo "  brew install geany"; \
+			echo ""; \
+			exit 1; \
+		fi; \
+	else \
+		if ! command -v geany >/dev/null 2>&1; then \
+			echo "ERROR: Geany is not installed."; \
+			echo ""; \
+			echo "On Ubuntu/Debian, install with:"; \
+			echo "  sudo apt-get install geany geany-dev libgtk-3-dev"; \
+			echo ""; \
+			echo "On CentOS/RHEL, install with:"; \
+			echo "  sudo yum install geany geany-devel gtk3-devel"; \
+			echo ""; \
+			exit 1; \
+		fi; \
 	fi
-	@echo "Geany found: $$(which geany)"
+	@echo "Geany development environment ready"
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)

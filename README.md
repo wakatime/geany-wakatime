@@ -7,6 +7,16 @@ Automatic time tracking for programmers using WakaTime in Geany IDE.
 ### Install Geany
 
 **macOS:**
+
+⚠️ **Important**: You need the Homebrew formula version (not cask) for plugin development.
+
+If you already have Geany cask installed:
+```bash
+brew uninstall --cask geany
+brew install geany
+```
+
+If you don't have Geany installed:
 ```bash
 brew install geany
 ```
